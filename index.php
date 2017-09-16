@@ -12,7 +12,9 @@
 </head>
 <body>
 <div id="wrapper">
-  <h1>Check Tracking System</h1>
+  <header>
+    <h1>CheckMate - PoC</h1>
+  </header>
   <div class="list-panel">
     <div class="item-list">
       <table id="list" style="width:100%">
@@ -29,10 +31,10 @@
       </div>
       <div class="input-section">
         <h2>Address</h2>
-        <label for="street"><input type="text" id="street"><br>
-        <label for="city"><input type="text" id="city"><br>
-        <label for="state"><input type="text" id="state"><br>
-        <label for="zip"><input type="text" id="zip"><br>
+        <label for="street">Street: </label><input type="text" id="street"><br>
+        <label for="city">City: </label><input type="text" id="city"><br>
+        <label for="state">State: </label><input type="text" id="state"><br>
+        <label for="zip">Zip: </label><input type="text" id="zip"><br>
       </div>
       <div class="input-section">
         <h2>Check Informtation</h2>
@@ -41,12 +43,10 @@
         <label for="accountNumber">Account No.</label>
         <input type="text" id="accountNumber">
       </div>
-      <div class="input-section">
-        <input type="button" onclick="update()" value="Update" />
-        <input type="button" onclick="create()" value="Create" />
-        <input type="button" onclick="del()" value="Delete" />
-      </div>
     </form>
+    <input type="button" onclick="update()" value="Update" />
+    <input type="button" onclick="create()" value="Create" />
+    <input type="button" onclick="del()" value="Delete" />
   </div>
 </div>
 
