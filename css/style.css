@@ -1,0 +1,52 @@
+tr,th,td{
+	text-align: center;
+}
+th {
+  border-bottom: 1px solid #ddd;
+}
+
+/* List Section Styles */
+.list-panel {
+	width: 100%;
+	height: 60%;
+}
+.account {
+	background-color: white;
+	cursor: pointer;
+}
+.account:nth-child(odd){
+	background-color: lightgrey;
+}
+.account:hover {
+	background-color: darkgrey;
+}
+.account.selected {
+	background-color: #2d5086;
+}
+
+/* Input Panel Styles */
+.input-panel {
+	width: 100%;
+	height: 40%;
+}
+.input-panel form {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+}
+.input-section {
+	width: 25%;
+}
+
+input[type=button] {
+	margin: 10px;
+	margin-top: 50px;
+}
+
+input[type=text] {
+		border-radius: 3px;
+		border: 1px solid darkgrey;
+    padding: 8px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+}
