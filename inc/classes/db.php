@@ -53,13 +53,13 @@ class Database {
     return true;
   }
 
-  public function Select_Accounts_All() {
-    $sql = "SELECT * FROM `account`";
+  public function Select_Accounts_All($company) {
+    $sql = "SELECT * FROM `account` WHERE company_ID = " . $company->get_id();
     $results = $this->connection->query($sql);
     $ret = array();
     if($results->num_rows > 0) {
       while($row = $results->fetch_assoc()) {
-        array_push($ret, new account($row['account_ID'], $row['account_fname'], $row['account_lname'], $row['account_street'], $row['account_city'], $row['account_state'], $row['account_zip']));
+        array_push($ret, new account($row['account_ID'], $row['account_fname'], $row['account_lname'], $row['account_street'], $row['account_city'], $row['account_state'], $row['account_zip'], $row['account_number'], $row['account_routing_number']));
       }
     }
     return $ret;
@@ -70,10 +70,33 @@ class Database {
     $results = $this->connection->query($sql);
     if($results->num_rows > 0) {
       while($row = $results->fetch_assoc()) {
-        return new account($row['account_ID'], $row['account_fname'], $row['account_lname'], $row['account_street'], $row['account_city'], $row['account_state'], $row['account_zip']);
+        return new account($row['account_ID'], $row['account_fname'], $row['account_lname'], $row['account_street'], $row['account_city'], $row['account_state'], $row['account_zip'], $row['account_number'], $row['account_routing_number']);
       }
     }
     return $ret;
+  }
+
+  public function Account_Exists($account_number, $routing_number) {
+    $sql = "SELECT * FROM `account` WHERE `account_number` = " . $account_number . " AND `account_routing_number` = " . $routing_number;
+    $results = $this->connection->query($sql);
+    if($results->num_rows > 0) {
+      while($row = $results->fetch_assoc()) {
+        return new account($row['account_ID'], $row['account_fname'], $row['account_lname'], $row['account_street'], $row['account_city'], $row['account_state'], $row['account_zip'], $row['account_number'], $row['account_routing_number']);
+      }
+    }
+    return null;
+  }
+
+  public function Insert_Account($fname, $lname, $street, $city, $state, $zip, $account_number, $routing_number, $companyId) {
+    $stmt = $this->connection->prepare("INSERT INTO `account` (account_fname, account_lname, account_street, account_city, account_state, account_zip, account_number, account_routing_number, company_ID)
+      VALUES (?,?,?,?,?,?,?,?,?)");
+    $stmt->bind_param("ssssssssi", $fname, $lname, $street, $city, $state, $zip, $account_number, $routing_number, $companyId);
+    $stmt->execute();
+    if($stmt->error){
+      echo $stmt->error;
+      return false;
+    }
+    return true;
   }
 
   public function Select_Checks($account) {
@@ -85,7 +108,7 @@ class Database {
     $ret = array();
     if($results->num_rows > 0) {
       while($row = $results->fetch_assoc()) {
-        array_push($ret, new Check($row["check_ID"], $row['check_ammount'], $row['check_date'], $row['letter_sent_date'], $row['account_number'], $row['acocunt_routing_number'], $row['payment_received'], $row['Store_store_ID'], $row['Store_Company_company_ID'], $row['Account_account_ID'], $row['letter_status']));
+        array_push($ret, new Check($row["check_ID"], $row['check_ammount'], $row['check_date'], $row['letter_sent_date'], $row['payment_received'], $row['Store_store_ID'], $row['Store_Company_company_ID'], $row['Account_account_ID'], $row['letter_status']));
       }
     }
     return $ret;
@@ -100,10 +123,26 @@ class Database {
     $ret = array();
     if($results->num_rows > 0) {
       while($row = $results->fetch_assoc()) {
-        array_push($ret, new Check($row["check_ID"], $row['check_ammount'], $row['check_date'], $row['letter_sent_date'], $row['account_number'], $row['acocunt_routing_number'], $row['payment_received'], $row['Store_store_ID'], $row['Store_Company_company_ID'], $row['Account_account_ID'], $row['letter_status']));
+        array_push($ret, new Check($row["check_ID"], $row['check_ammount'], $row['check_date'], $row['letter_sent_date'], $row['payment_received'], $row['Store_store_ID'], $row['Store_Company_company_ID'], $row['Account_account_ID'], $row['letter_status']));
       }
     }
     return $ret;
+  }
+
+  public function Insert_Check($amount, $date, $store, $account) {
+    $storeId = $store->get_id();
+    $companyId = $store->get_company()->get_id();
+    $accountId = $account->get_id();
+
+    $stmt = $this->connection->prepare("INSERT INTO `check` (check_ammount, check_date, payment_received, Store_store_ID, Store_Company_company_ID, Account_account_ID, letter_status)
+      VALUES (?,?,0,?,?,?,1)");
+    $stmt->bind_param("dsiii", $amount, $date, $storeId, $companyId, $accountId);
+    $stmt->execute();
+    if($stmt->error) {
+      echo $stmt->error;
+      return false;
+    }
+    return true;
   }
 
 

@@ -15,8 +15,11 @@ class Account {
   private $state;
   private $zip;
 
+  private $account_number;
+  private $routing_number;
+
   // Constructor
-  public function __construct($_id, $_first_name, $_last_name, $_address, $_city, $_state, $_zip){
+  public function __construct($_id, $_first_name, $_last_name, $_address, $_city, $_state, $_zip, $_account_number, $_routing_number){
     $this->id = $_id;
     $this->firstName = $_first_name;
     $this->lastName = $_last_name;
@@ -24,6 +27,8 @@ class Account {
     $this->city = $_city;
     $this->state = $_state;
     $this->zip = $_zip;
+    $this->account_number = $_account_number;
+    $this->routing_number = $_routing_number;
   }
 
   // Getter Methds
@@ -34,6 +39,8 @@ class Account {
   public function get_city() { return $this->city; }
   public function get_state() { return $this->state; }
   public function get_zip() { return $this->zip; }
+  public function get_account_number() { return $this->account_number; }
+  public function get_routing_number() { return $this->routing_number; }
 
   // Setter Methods
   public function set_first_name($_first_name) { $this->firstName = $_first_name; }
@@ -42,6 +49,8 @@ class Account {
   public function set_city($_city) { $this->city = $_city; }
   public function set_state($_state) { $this->state = $_state; }
   public function set_zip($_zip) { $this->zip = $_zip; }
+  public function set_account_number($number) { $this->account_number = $number; }
+  public function set_routing_number($number) { $this->routing_number = $number; }
 };
 
 class AccountDAO {

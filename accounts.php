@@ -4,6 +4,9 @@ $title = "Accounts";
 include 'inc/app.php';
 include 'page-parts/header.php';
 include 'page-parts/sidebar.php';
+
+$user = $app->db->Select_User($_SESSION['user_id']);
+$company = $user->get_store()->get_company();
  ?>
  <div class="page-head">
    <h1>Accounts</h1>
@@ -30,8 +33,9 @@ include 'page-parts/sidebar.php';
              <th>City</th>
              <th>State</th>
              <th>Zip</th>
+             <th>Account Number</th>
            </tr>
-           <?php $app->Get_Accounts_HTML(); ?>
+           <?php $app->Get_Accounts_HTML($company); ?>
        </table>
      </div>
    </div>

@@ -18,8 +18,8 @@
     public function Get_Raw_Accounts() {
       return $this->db->Select_Accounts_All();
     }
-    public function Get_Accounts_HTML() {
-      $accounts = $this->db->Select_Accounts_All();
+    public function Get_Accounts_HTML($company) {
+      $accounts = $this->db->Select_Accounts_All($company);
       foreach($accounts as $account): ?>
         <tr class="list-item" id="account-<?php echo $account->get_id(); ?>">
           <td><a href="account-single.php?account=<?php echo $account->get_id(); ?>"><?php echo $account->get_first_name(); ?></a></td>
@@ -28,6 +28,7 @@
           <td><a href="account-single.php?account=<?php echo $account->get_id(); ?>"><?php echo $account->get_city(); ?></a></td>
           <td><a href="account-single.php?account=<?php echo $account->get_id(); ?>"><?php echo $account->get_state(); ?></a></td>
           <td><a href="account-single.php?account=<?php echo $account->get_id(); ?>"><?php echo $account->get_zip(); ?></a></td>
+          <td><a href="account-single.php?account=<?php echo $account->get_id(); ?>"><?php echo $account->get_account_number(); ?></a></td>
         </tr>
       <?php endforeach;
     }
@@ -60,6 +61,23 @@
       <?php endforeach; ?>
       </div>
       <?php
+    }
+
+    public function Add_Check($fname, $lname, $street, $city, $state, $zip, $routing, $account, $amount, $date, $number) {
+      $user = $this->db->Select_User($_SESSION['user_id']);
+      $store = $user->get_store();
+
+      $accountObj = $this->db->Account_Exists($account, $routing);
+      if($accountObj == null) {
+        if(!$this->db->Insert_Account($fname, $lname, $street, $city, $state, $zip, $account, $routing, $store->get_company()->get_id())) {
+          return false;
+        }
+      }
+
+      if(!$this->db->Insert_Check($amount, $date, $store, $this->db->Account_Exists($account, $routing))){
+        return false;
+      }
+      return true;
     }
 
     // STORE METHODS

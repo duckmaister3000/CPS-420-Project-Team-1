@@ -40,6 +40,14 @@
             $app->Get_Store_HTML($company);
           }
           break;
+        case 'check':
+            if(!$app->Add_Check($_POST['first'], $_POST['last'], $_POST['street'], $_POST['city'], $_POST['state'], $_POST['zip'],
+              $_POST['routing'], $_POST['account'], $_POST['amount'], $_POST['date'], $_POST['number'])) {
+                echo "Error Adding Check";
+              } else {
+                echo "Successfully Added Check";
+              }
+          break;
 
         default:
           # code...

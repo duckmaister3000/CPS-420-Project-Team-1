@@ -36,7 +36,7 @@ function select(id){
   document.getElementById('accountNumber').value = item.cells[7].innerHTML;
 }
 
-function get_data(action){
+function get_data(action, target){
   var data = new FormData();
   var first = document.getElementById('first-name').value;
   var last = document.getElementById('last-name').value;
@@ -44,56 +44,57 @@ function get_data(action){
   var city = document.getElementById('city').value;
   var state = document.getElementById('state').value;
   var zip = document.getElementById('zip').value
-  var routing = document.getElementById('routingNumber').value;
-  var account = document.getElementById('accountNumber').value;
+  var routing = document.getElementById('routing-number').value;
+  var account = document.getElementById('account-number').value;
   var amount = document.getElementById('amount').value;
   var date = document.getElementById('date');
   var number = document.getElementById('number');
   if(first == "") {
-    showModal();
+    //showModal();
     return null;
   }
   if(last == "") {
-    showModal();
+    //showModal();
     return null;
   }
   if(street == "") {
-    showModal();
+    //showModal();
     return null;
   }
   if(city == "") {
-    showModal();
+    //showModal();
     return null;
   }
   if(state == "") {
-    showModal();
+    //showModal();
     return null;
   }
   if(zip == "") {
-    showModal();
+    //showModal();
     return null;
   }
   if(routing == "") {
-    showModal();
+    //showModal();
     return null;
   }
   if(account == "") {
-    showModal();
+    //showModal();
     return null;
   }
   if(amount == "") {
-    showModal();
+    //showModal();
     return null;
   }
   if(date == "") {
-    showModal();
+    //showModal();
     return null;
   }
   if(number == "") {
-    showModal();
+    //showModal();
     return null;
   }
   data.append("action", action);
+  data.append("target", target);
   data.append("id", selected);
   data.append("first", first);
   data.append("last", last);
@@ -167,7 +168,7 @@ function del() {
 }
 
 function addCheck() {
-  var data = get_data('add');
+  var data = get_data('create', 'check');
   if(data == null) {
     return;
   }
@@ -181,6 +182,8 @@ function addCheck() {
     data: data,
     type: 'post',
     success: function(response){
+      console.log(response);
+      document.getElementsByClassName('notif')[0].innerHTML = response;
       document.getElementsByClassName('notif')[0].classList.toggle('show');
     }
   });
@@ -234,6 +237,7 @@ function addStore() {
         return;
       } else {
         document.getElementById('store-list').innerHTML = response;
+        document.getElementById('add-store-form').classList.toggle('show');
       }
     }
   });
