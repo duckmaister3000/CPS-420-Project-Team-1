@@ -22,8 +22,8 @@ function my_assert_handler($file, $line, $code, $desc = null)
 assert_options(ASSERT_CALLBACK, 'my_assert_handler');
 
 echo '<p>sizeof($app=>Get_All_Accounts()) == 30 -';
-$accounts = $app->Get_Raw_Accounts();
-if(sizeof($accounts) == 30) {
+$accounts = $app->Get_Raw_Accounts($app->db->Select_Company(1));
+if(sizeof($accounts) == 31) {
   echo ' OK</p>';
 } else {
   echo ' FAILED</p>';
@@ -31,7 +31,7 @@ if(sizeof($accounts) == 30) {
 
 echo '<p>sizeof($app->Get_Raw_Checks()) == 30 -';
 $checks = $app->Get_Raw_Checks();
-if(sizeof($checks) == 30) {
+if(sizeof($checks) == 32) {
   echo ' OK</p>';
 } else {
   echo ' FAILED</p>';
@@ -39,7 +39,7 @@ if(sizeof($checks) == 30) {
 
 echo '<p>sizeof($app->db->Select_Checks($accounts[0])) == 2 -';
 $checks2 = $app->db->Select_Checks($accounts[0]);
-if(sizeof($checks2) == 2) {
+if(sizeof($checks2) == 3) {
   echo ' OK</p>';
 } else {
   echo sizeof($checks2);
@@ -89,6 +89,21 @@ if($app->verifyManager(1)) {
 }
 echo "<p>Test 9 -";
 if(!$app->verifyManager(2)) {
+  echo ' OK</p>';
+} else {
+  echo 'FAILED</p>';
+}
+
+echo "<p>Test 10 -";
+$user = $app->db->Auth_User("emmitt@gmail.com", "password");
+if($user != null) {
+  echo ' OK</p>';
+} else {
+  echo 'FAILED</p>';
+}
+echo "<p>Test 11 -";
+$check = $app->db->Select_Check(32);
+if($check != null && $check->get_amount() == 999.99) {
   echo ' OK</p>';
 } else {
   echo 'FAILED</p>';

@@ -3,6 +3,8 @@ include 'inc/app.php';
 include 'page-parts/header.php';
 include 'page-parts/sidebar.php';
 $account = $app->Get_Account_by_Id($_GET['account']);
+$user = $app->db->Select_User($_SESSION['user_id']);
+$company = $user->get_store()->get_company();
 if($account == null) {
   echo "<h1>404</h1>";
   echo $_GET['account'];
@@ -10,6 +12,22 @@ if($account == null) {
   //go to 404 page
 }
  ?>
+ <div class="modal" id="manager-confirm">
+   <div class="modal-content">
+     <h3>Please enter your manager credentials</h3>
+     <form>
+       <label>Username: </label>
+       <input type="text" id="manager-username" /><br>
+       <br>
+       <label>Password: </label>
+       <input type="password" id="manager-password" /><br>
+       <br>
+       <input type="hidden" id="target-check" />
+       <input type="button" class="button" onclick="deleteCheck()" value="Submit"/>
+       <input type="button" class="button" onclick="closeManagerConfirm()" value="Cancel" />
+     </form>
+   </div>
+ </div>
  <div class="page-head">
    <h1>John Doe</h1>
  </div>
@@ -26,7 +44,9 @@ if($account == null) {
        <label>Zip</label><input type="text" value="<?php echo $account->get_zip(); ?>" />
      </p>
    </div>
-   <?php $app->Get_Checks_HTML($account); ?>
+   <div class="check-list" id="check-list">
+     <?php $app->Get_Checks_HTML($account); ?>
+   </div>
  </div>
  <?php
  include 'page-parts/footer.php';

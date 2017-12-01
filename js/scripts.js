@@ -189,6 +189,41 @@ function addCheck() {
   });
 }
 
+function deleteCheck(user) {
+  var username = document.getElementById('manager-username').value;
+  var password = document.getElementById('manager-password').value;
+  var check = document.getElementById('target-check').value;
+  var data = new FormData();
+  var ret = false;
+  data.append("action", "delete");
+  data.append("target", "check");
+  data.append("username", username);
+  data.append("password", password);
+  data.append("check", check);
+  $.ajax({
+    url: 'ajax-handler.php', // point to server-side PHP script
+    dataType: 'text',  // what to expect back from the PHP script, if anything
+    cache: false,
+    contentType: false,
+    processData: false,
+    data: data,
+    type: 'post',
+    success: function(response){
+      console.log(response.substring(0,5));
+      if(response.substring(0,5) == "[ERR]") {
+        document.getElementsByClassName('notif')[0].innerHTML = response.substring(5);
+        closeManagerConfirm();
+        if(!document.getElementsByClassName('notif')[0].classList.contains('show')) {
+          document.getElementsByClassName('notif')[0].classList.add('show');
+        }
+      } else {
+        document.getElementById('check-list').innerHTML = response;
+        closeManagerConfirm();
+      }
+    }
+  });
+}
+
 function addStore() {
   var data = new FormData();
   var action = "create";
@@ -303,4 +338,13 @@ function showStoreForm() {
       }
     }
   });
+}
+
+function closeManagerConfirm() {
+  document.getElementById('manager-confirm').classList.remove('show');
+}
+function showManagerConfirm(check) {
+  document.getElementsByClassName('notif')[0].classList.remove('show');
+  document.getElementById('target-check').value = check;
+  document.getElementById('manager-confirm').classList.add('show');
 }

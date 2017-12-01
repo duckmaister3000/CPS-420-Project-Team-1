@@ -56,13 +56,29 @@
       exit();
     }
     if($action == "delete"){
-      $account = new Account(
-        $_POST['id'], $_POST['first'], $_POST['last'],
-        $_POST['street'],$_POST['city'],$_POST['state'],$_POST['zip'],
-        $_POST['country'],$_POST['routing'],$_POST['account']
-      );
-      AccountDAO::Delete($account);
-      App::get_accounts();
-      exit();
+      $target = $_POST['target'];
+      switch ($target) {
+        case 'check':
+          $user = $app->Authenticate_User($_POST['username'], $_POST['password']);
+          if($user == null) {
+            echo "[ERR]Wrong Username or Password";
+            break;
+          }
+          if($user->get_role() == "manager") {
+            $account = $app->db->Select_Check($_POST['check'])->get_account();
+            if(!$app->Delete_Check($_POST['check'])) {
+              echo "[ERR]Error deleting Check";
+              break;
+            }
+            $app->Get_Checks_HTML($account);
+          } else {
+            echo "[ERR]Insufficient Priveleges to Delete Check";
+          }
+          break;
+
+        default:
+          # code...
+          break;
+      }
     }
   }

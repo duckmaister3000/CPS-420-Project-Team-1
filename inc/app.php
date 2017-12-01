@@ -15,8 +15,8 @@
       return $this->db->Select_Checks_All();
     }
 
-    public function Get_Raw_Accounts() {
-      return $this->db->Select_Accounts_All();
+    public function Get_Raw_Accounts($company) {
+      return $this->db->Select_Accounts_All($company);
     }
     public function Get_Accounts_HTML($company) {
       $accounts = $this->db->Select_Accounts_All($company);
@@ -43,9 +43,9 @@
     //CHECK Methods
 
     public function Get_Checks_HTML($account) {
-      ?>
-      <div class="check-list">
-        <?php if($account == null) {
+      global $user;
+
+      if($account == null) {
           echo "</div>";
           return;
         }
@@ -57,10 +57,9 @@
           <div class="payment-button <?php echo $check->get_payment_recieved() == 0 ? "" : "disabled"; ?>">
             Pay Check
           </div>
+          <div class="delete-button" onclick="showManagerConfirm(<?php echo $check->get_id(); ?>)">Delete</div>
         </div>
-      <?php endforeach; ?>
-      </div>
-      <?php
+      <?php endforeach;
     }
 
     public function Add_Check($fname, $lname, $street, $city, $state, $zip, $routing, $account, $amount, $date, $number) {
@@ -78,6 +77,10 @@
         return false;
       }
       return true;
+    }
+
+    public function Delete_Check($checkId) {
+      return $this->db->Delete_Check($checkId);
     }
 
     // STORE METHODS
@@ -119,6 +122,10 @@
       } else {
         return false;
       }
+    }
+
+    public function Authenticate_User($username, $password) {
+      return $this->db->Auth_User($username, $password);
     }
   };
 

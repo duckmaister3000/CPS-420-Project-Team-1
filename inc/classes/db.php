@@ -123,7 +123,23 @@ class Database {
     $ret = array();
     if($results->num_rows > 0) {
       while($row = $results->fetch_assoc()) {
-        array_push($ret, new Check($row["check_ID"], $row['check_ammount'], $row['check_date'], $row['letter_sent_date'], $row['payment_received'], $row['Store_store_ID'], $row['Store_Company_company_ID'], $row['Account_account_ID'], $row['letter_status']));
+        array_push($ret, new Check($row["check_ID"], $row['check_ammount'], $row['check_date'], $row['letter_sent_date'], $row['payment_received'], $this->Select_Store($row['Store_store_ID']), $this->Select_Company($row['Store_Company_company_ID']), $this->Select_Account($row['Account_account_ID']), $row['letter_status']));
+      }
+    }
+    return $ret;
+  }
+
+  public function Select_Check($id) {
+    $sql = "SELECT * FROM `check` WHERE check_ID = " . $id;
+    $results = $this->connection->query($sql);
+    if($this->connection->error) {
+      echo $this->connection->error;
+      return null;
+    }
+    $ret = array();
+    if($results->num_rows > 0) {
+      while($row = $results->fetch_assoc()) {
+        return new Check($row["check_ID"], $row['check_ammount'], $row['check_date'], $row['letter_sent_date'], $row['payment_received'], $this->Select_Store($row['Store_store_ID']), $this->Select_Company($row['Store_Company_company_ID']), $this->Select_Account($row['Account_account_ID']), $row['letter_status']);
       }
     }
     return $ret;
@@ -140,6 +156,16 @@ class Database {
     $stmt->execute();
     if($stmt->error) {
       echo $stmt->error;
+      return false;
+    }
+    return true;
+  }
+
+  public function Delete_Check($checkId) {
+    $stmt = $this->connection->prepare("DELETE FROM `check` WHERE check_ID = ?");
+    $stmt->bind_param("i", $checkId);
+    $stmt->execute();
+    if($stmt->error) {
       return false;
     }
     return true;
@@ -229,7 +255,22 @@ class Database {
     }
     $ret = array();
     if($results->num_rows > 0) {
+      //TODO
+    }
+  }
 
+  public function Auth_User($username, $password) {
+    $username = mysqli_real_escape_string($this->connection, $username);
+    $password = mysqli_real_escape_string($this->connection, $password);
+    $sql = "SELECT * FROM `user` WHERE user_email = '" . $username . "' AND user_password = '" . $password . "'";
+    $results = $this->connection->query($sql);
+    if($this->connection->error) {
+      echo $this->connection->error;
+      return null;
+    }
+    if($results->num_rows > 0) {
+      $row = $results->fetch_assoc();
+      return new User($row['user_ID'], $row['user_email'], $row['user_password'], $row['user_role_name'], $this->Select_Store($row['Store_store_ID']));
     }
   }
 };
