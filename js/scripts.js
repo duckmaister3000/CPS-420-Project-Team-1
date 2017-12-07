@@ -47,7 +47,7 @@ function get_data(action, target){
   var routing = document.getElementById('routing-number').value;
   var account = document.getElementById('account-number').value;
   var amount = document.getElementById('amount').value;
-  var date = document.getElementById('date');
+  var date = document.getElementById('date').value;
   var number = document.getElementById('number');
   if(first == "") {
     //showModal();
@@ -118,7 +118,7 @@ function update() {
     return;
   }
   $.ajax({
-    url: '/ajax-handler.php', // point to server-side PHP script
+    url: 'ajax-handler.php', // point to server-side PHP script
     dataType: 'text',  // what to expect back from the PHP script, if anything
     cache: false,
     contentType: false,
@@ -136,7 +136,7 @@ function create() {
     return;
   }
   $.ajax({
-    url: '/ajax-handler.php', // point to server-side PHP script
+    url: 'ajax-handler.php', // point to server-side PHP script
     dataType: 'text',  // what to expect back from the PHP script, if anything
     cache: false,
     contentType: false,
@@ -154,7 +154,7 @@ function del() {
     return;
   }
   $.ajax({
-    url: '/ajax-handler.php', // point to server-side PHP script
+    url: 'ajax-handler.php', // point to server-side PHP script
     dataType: 'text',  // what to expect back from the PHP script, if anything
     cache: false,
     contentType: false,
@@ -174,7 +174,7 @@ function addCheck() {
   }
 
   $.ajax({
-    url: '/ajax-handler.php', // point to server-side PHP script
+    url: 'ajax-handler.php', // point to server-side PHP script
     dataType: 'text',  // what to expect back from the PHP script, if anything
     cache: false,
     contentType: false,
