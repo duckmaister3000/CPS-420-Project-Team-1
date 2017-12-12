@@ -151,7 +151,7 @@ class Database {
     $accountId = $account->get_id();
 
     $stmt = $this->connection->prepare("INSERT INTO `check` (check_ammount, check_date, payment_received, Store_store_ID, Store_Company_company_ID, Account_account_ID, letter_status)
-      VALUES (?,?,0,?,?,?,1)");
+      VALUES (?,?,0,?,?,?,0)");
     $stmt->bind_param("dsiii", $amount, $date, $storeId, $companyId, $accountId);
     $stmt->execute();
     if($stmt->error) {
