@@ -1,8 +1,11 @@
 <?php
 include 'inc/app.php';
+$error = "";
 
 if($_SERVER["REQUEST_METHOD"] == "POST") {
       // username and password sent from form
+
+
 
       $myemail = mysqli_real_escape_string($db,$_POST['user_email']);
       $mypassword = mysqli_real_escape_string($db,$_POST['user_password']);
@@ -27,7 +30,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
         header("location: index.php");
       }else {
          $error = "Your Email ID or Password is invalid";
-         echo "$error";
 
       }
    }
@@ -52,12 +54,16 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     <!--<label><b>Password</b></label>-->
     <input type="password" placeholder="Enter Password" name="user_password" required>
 
+    <div style="color:red" class="error">
+    <?php echo $error;?>
+    </div>
+
     <button type="submit">Login</button>
     <!--<br><input type="checkbox" checked="checked"> Remember me </br> -->
 
   </div>
   <div class="container" style="background-color:#f1f1f1">
-    <span class="psw">Forgot <a href="#">password?</a></span>
+    <span class="psw">Forgot <a href="forgot-password.php">password?</a></span>
   </div>
 
 </form>
