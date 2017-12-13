@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 13, 2017 at 02:01 PM
+-- Generation Time: Dec 13, 2017 at 02:03 PM
 -- Server version: 5.7.14
 -- PHP Version: 7.0.10
 
@@ -26,8 +26,8 @@ SET time_zone = "+00:00";
 -- Table structure for table `account`
 --
 
-CREATE TABLE `account` (
-  `account_ID` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `account` (
+  `account_ID` int(11) NOT NULL AUTO_INCREMENT,
   `account_fname` varchar(45) NOT NULL,
   `account_lname` varchar(45) NOT NULL,
   `account_street` varchar(45) NOT NULL,
@@ -36,8 +36,10 @@ CREATE TABLE `account` (
   `account_zip` varchar(45) NOT NULL,
   `account_number` varchar(25) CHARACTER SET utf8mb4 NOT NULL,
   `account_routing_number` varchar(45) CHARACTER SET utf8 NOT NULL,
-  `company_ID` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=big5;
+  `company_ID` int(11) NOT NULL,
+  PRIMARY KEY (`account_ID`),
+  UNIQUE KEY `account_ID_UNIQUE` (`account_ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=big5;
 
 --
 -- Dumping data for table `account`
@@ -82,11 +84,13 @@ INSERT INTO `account` (`account_ID`, `account_fname`, `account_lname`, `account_
 -- Table structure for table `bank`
 --
 
-CREATE TABLE `bank` (
-  `bank_ID` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `bank` (
+  `bank_ID` int(11) NOT NULL AUTO_INCREMENT,
   `bank_name` varchar(45) NOT NULL,
-  `bank_address` varchar(45) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `bank_address` varchar(45) NOT NULL,
+  PRIMARY KEY (`bank_ID`),
+  UNIQUE KEY `bank_ID_UNIQUE` (`bank_ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `bank`
@@ -104,8 +108,8 @@ INSERT INTO `bank` (`bank_ID`, `bank_name`, `bank_address`) VALUES
 -- Table structure for table `check`
 --
 
-CREATE TABLE `check` (
-  `check_ID` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `check` (
+  `check_ID` int(11) NOT NULL AUTO_INCREMENT,
   `check_ammount` decimal(7,2) NOT NULL,
   `check_date` date DEFAULT NULL,
   `letter_sent_date` date DEFAULT NULL,
@@ -113,8 +117,12 @@ CREATE TABLE `check` (
   `Store_store_ID` int(11) NOT NULL,
   `Store_Company_company_ID` int(11) NOT NULL,
   `Account_account_ID` int(11) NOT NULL,
-  `letter_status` varchar(45) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `letter_status` varchar(45) NOT NULL,
+  PRIMARY KEY (`check_ID`,`Store_store_ID`,`Store_Company_company_ID`,`Account_account_ID`),
+  UNIQUE KEY `check_ID_UNIQUE` (`check_ID`),
+  KEY `fk_Check_Store1_idx` (`Store_store_ID`,`Store_Company_company_ID`),
+  KEY `fk_Check_Account1_idx` (`Account_account_ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `check`
@@ -160,12 +168,14 @@ INSERT INTO `check` (`check_ID`, `check_ammount`, `check_date`, `letter_sent_dat
 -- Table structure for table `company`
 --
 
-CREATE TABLE `company` (
-  `company_ID` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `company` (
+  `company_ID` int(11) NOT NULL AUTO_INCREMENT,
   `company_name` varchar(45) NOT NULL,
   `company_contact` varchar(45) NOT NULL,
-  `company_letter_interval` varchar(45) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `company_letter_interval` varchar(45) NOT NULL,
+  PRIMARY KEY (`company_ID`),
+  UNIQUE KEY `company_ID_UNIQUE` (`company_ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `company`
@@ -180,9 +190,12 @@ INSERT INTO `company` (`company_ID`, `company_name`, `company_contact`, `company
 -- Table structure for table `company_has_bank`
 --
 
-CREATE TABLE `company_has_bank` (
+CREATE TABLE IF NOT EXISTS `company_has_bank` (
   `Company_company_ID` int(11) NOT NULL,
-  `Bank_bank_ID` int(11) NOT NULL
+  `Bank_bank_ID` int(11) NOT NULL,
+  PRIMARY KEY (`Company_company_ID`,`Bank_bank_ID`),
+  KEY `fk_Company_has_Bank_Bank1_idx` (`Bank_bank_ID`),
+  KEY `fk_Company_has_Bank_Company_idx` (`Company_company_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -199,14 +212,17 @@ INSERT INTO `company_has_bank` (`Company_company_ID`, `Bank_bank_ID`) VALUES
 -- Table structure for table `letter`
 --
 
-CREATE TABLE `letter` (
-  `letter_ID` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `letter` (
+  `letter_ID` int(11) NOT NULL AUTO_INCREMENT,
   `letter_header` longtext NOT NULL,
   `letter_body` longtext NOT NULL,
   `letter_footer` longtext NOT NULL,
   `letter_number` int(11) NOT NULL,
-  `Company_company_ID` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `Company_company_ID` int(11) NOT NULL,
+  PRIMARY KEY (`letter_ID`,`Company_company_ID`),
+  UNIQUE KEY `letter_id_UNIQUE` (`letter_ID`),
+  KEY `fk_Letter_Company1_idx` (`Company_company_ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `letter`
@@ -223,14 +239,15 @@ INSERT INTO `letter` (`letter_ID`, `letter_header`, `letter_body`, `letter_foote
 -- Table structure for table `report`
 --
 
-CREATE TABLE `report` (
-  `report_ID` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `report` (
+  `report_ID` int(11) NOT NULL AUTO_INCREMENT,
   `report_file` varchar(256) NOT NULL,
   `letter_number` int(11) NOT NULL,
   `report_printed` tinyint(1) NOT NULL DEFAULT '0',
   `check_ID` int(11) NOT NULL,
-  `company_ID` int(11) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  `company_ID` int(11) NOT NULL,
+  PRIMARY KEY (`report_ID`)
+) ENGINE=MyISAM AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `report`
@@ -247,15 +264,18 @@ INSERT INTO `report` (`report_ID`, `report_file`, `letter_number`, `report_print
 -- Table structure for table `store`
 --
 
-CREATE TABLE `store` (
-  `store_ID` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `store` (
+  `store_ID` int(11) NOT NULL AUTO_INCREMENT,
   `store_name` varchar(45) NOT NULL,
   `store_street` varchar(45) NOT NULL,
   `store_city` varchar(45) NOT NULL,
   `store_state` varchar(45) NOT NULL,
   `store_zip` varchar(45) NOT NULL,
-  `Company_company_ID` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `Company_company_ID` int(11) NOT NULL,
+  PRIMARY KEY (`store_ID`,`Company_company_ID`),
+  UNIQUE KEY `store_ID_UNIQUE` (`store_ID`),
+  KEY `fk_Store_Company1_idx` (`Company_company_ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `store`
@@ -271,16 +291,19 @@ INSERT INTO `store` (`store_ID`, `store_name`, `store_street`, `store_city`, `st
 -- Table structure for table `user`
 --
 
-CREATE TABLE `user` (
-  `user_ID` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `user` (
+  `user_ID` int(11) NOT NULL AUTO_INCREMENT,
   `user_fname` varchar(45) NOT NULL,
   `user_lname` varchar(45) NOT NULL,
   `user_email` varchar(45) DEFAULT NULL,
   `user_password` varchar(45) NOT NULL,
   `user_role_name` varchar(45) NOT NULL,
   `Store_store_ID` int(11) NOT NULL,
-  `Store_Company_company_ID` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `Store_Company_company_ID` int(11) NOT NULL,
+  PRIMARY KEY (`Store_store_ID`,`Store_Company_company_ID`,`user_ID`),
+  UNIQUE KEY `user_ID_UNIQUE` (`user_ID`),
+  UNIQUE KEY `user_email_UNIQUE` (`user_email`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `user`
@@ -291,122 +314,6 @@ INSERT INTO `user` (`user_ID`, `user_fname`, `user_lname`, `user_email`, `user_p
 (1, 'Hannah', 'Hagiss', 'hhagiss@gmail.com', 'password123', 'manager', 2, 1),
 (2, 'Emmit', 'Person', 'emmitt@gmail.com', 'password', 'clerk', 2, 1);
 
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `account`
---
-ALTER TABLE `account`
-  ADD PRIMARY KEY (`account_ID`),
-  ADD UNIQUE KEY `account_ID_UNIQUE` (`account_ID`);
-
---
--- Indexes for table `bank`
---
-ALTER TABLE `bank`
-  ADD PRIMARY KEY (`bank_ID`),
-  ADD UNIQUE KEY `bank_ID_UNIQUE` (`bank_ID`);
-
---
--- Indexes for table `check`
---
-ALTER TABLE `check`
-  ADD PRIMARY KEY (`check_ID`,`Store_store_ID`,`Store_Company_company_ID`,`Account_account_ID`),
-  ADD UNIQUE KEY `check_ID_UNIQUE` (`check_ID`),
-  ADD KEY `fk_Check_Store1_idx` (`Store_store_ID`,`Store_Company_company_ID`),
-  ADD KEY `fk_Check_Account1_idx` (`Account_account_ID`);
-
---
--- Indexes for table `company`
---
-ALTER TABLE `company`
-  ADD PRIMARY KEY (`company_ID`),
-  ADD UNIQUE KEY `company_ID_UNIQUE` (`company_ID`);
-
---
--- Indexes for table `company_has_bank`
---
-ALTER TABLE `company_has_bank`
-  ADD PRIMARY KEY (`Company_company_ID`,`Bank_bank_ID`),
-  ADD KEY `fk_Company_has_Bank_Bank1_idx` (`Bank_bank_ID`),
-  ADD KEY `fk_Company_has_Bank_Company_idx` (`Company_company_ID`);
-
---
--- Indexes for table `letter`
---
-ALTER TABLE `letter`
-  ADD PRIMARY KEY (`letter_ID`,`Company_company_ID`),
-  ADD UNIQUE KEY `letter_id_UNIQUE` (`letter_ID`),
-  ADD KEY `fk_Letter_Company1_idx` (`Company_company_ID`);
-
---
--- Indexes for table `report`
---
-ALTER TABLE `report`
-  ADD PRIMARY KEY (`report_ID`);
-
---
--- Indexes for table `store`
---
-ALTER TABLE `store`
-  ADD PRIMARY KEY (`store_ID`,`Company_company_ID`),
-  ADD UNIQUE KEY `store_ID_UNIQUE` (`store_ID`),
-  ADD KEY `fk_Store_Company1_idx` (`Company_company_ID`);
-
---
--- Indexes for table `user`
---
-ALTER TABLE `user`
-  ADD PRIMARY KEY (`Store_store_ID`,`Store_Company_company_ID`,`user_ID`),
-  ADD UNIQUE KEY `user_ID_UNIQUE` (`user_ID`),
-  ADD UNIQUE KEY `user_email_UNIQUE` (`user_email`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `account`
---
-ALTER TABLE `account`
-  MODIFY `account_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
---
--- AUTO_INCREMENT for table `bank`
---
-ALTER TABLE `bank`
-  MODIFY `bank_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
---
--- AUTO_INCREMENT for table `check`
---
-ALTER TABLE `check`
-  MODIFY `check_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
---
--- AUTO_INCREMENT for table `company`
---
-ALTER TABLE `company`
-  MODIFY `company_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
---
--- AUTO_INCREMENT for table `letter`
---
-ALTER TABLE `letter`
-  MODIFY `letter_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
---
--- AUTO_INCREMENT for table `report`
---
-ALTER TABLE `report`
-  MODIFY `report_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
---
--- AUTO_INCREMENT for table `store`
---
-ALTER TABLE `store`
-  MODIFY `store_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT for table `user`
---
-ALTER TABLE `user`
-  MODIFY `user_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
