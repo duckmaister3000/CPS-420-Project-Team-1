@@ -7,6 +7,9 @@ $user = $app->db->Select_User($_SESSION['user_id']);
 $company = $user->get_store()->get_company();
 
  ?>
+<div class="page-head">
+ <h1>Reports</h1>
+</div>
 <div class="report-list">
 <?php
   $app->Get_Report_HTML($company);

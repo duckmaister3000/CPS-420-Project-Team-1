@@ -23,6 +23,7 @@ if(isset($_POST['save-letter-3'])){
 $letters = $app->Get_Letters($company)
 
  ?>
+<div class="letter-settings">
 <h1>1st Letter Template</h1>
 <form action="settings-letters.php" method="post">
   <h3>Header<h3>
@@ -33,7 +34,7 @@ $letters = $app->Get_Letters($company)
   <textarea name="letter-1-footer"><?php echo $letters[0]->get_footer(); ?></textarea>
   <br>
   <input type="hidden" value="<?php echo $letters[0]->get_id();?>" name="letter-1-id"/>
-  <input type="submit" value="Save" name="save-letter-1"/>
+  <input type="submit" value="Save" name="save-letter-1" class="button"/>
 </form>
 
 <h1>2nd Letter Template</h1>
@@ -46,7 +47,7 @@ $letters = $app->Get_Letters($company)
   <textarea name="letter-2-footer"><?php echo $letters[1]->get_footer(); ?></textarea>
   <br>
   <input type="hidden" value="<?php echo $letters[1]->get_id();?>" name="letter-2-id"/>
-  <input type="submit" value="Save" name="save-letter-2"/>
+  <input type="submit" value="Save" name="save-letter-2" class="button"/>
 </form>
 <h1>3rd Letter Template</h1>
 <form action="settings-letters.php" method="post">
@@ -58,7 +59,8 @@ $letters = $app->Get_Letters($company)
   <textarea name="letter-3-footer"><?php echo $letters[2]->get_footer(); ?></textarea>
   <br>
   <input type="hidden" value="<?php echo $letters[1]->get_id();?>" name="letter-3-id"/>
-  <input type="submit" value="Save" name="save-letter-3"/>
+  <input type="submit" value="Save" name="save-letter-3" class="button"/>
 </form>
+</div>
  <?php
 include 'page-parts/footer.php';

@@ -14,6 +14,8 @@ body {
   font-family: sans-serif;
   margin: 0px 25px;
   cursor: pointer; }
+  .button.delete {
+    background-color: red; }
 
 /* HEADER STYLES */
 .header {
@@ -117,7 +119,8 @@ body {
   -webkit-box-pack: center;
   -webkit-justify-content: center;
   -ms-flex-pack: center;
-  justify-content: center; }
+  justify-content: center;
+  overflow: auto; }
 
 .page-wrapper {
   width: calc(100% - 300px);
@@ -191,7 +194,10 @@ body {
 /* ACCOUNT SINGLE STYLES */
 .account-info {
   width: 50%;
-  float: left; }
+  float: left;
+  margin-left: 50px; }
+  .account-info label {
+    margin-right: 8px; }
 
 .check-list {
   width: 50%;
@@ -230,12 +236,13 @@ body {
       margin-left: 10px; }
     .check-list .check .payment-button {
       margin: 10px;
-      padding: 10px 30px;
+      padding: 10px 40px;
       background-color: #000099;
       color: white;
       font-weight: bold;
       font-family: sans-serif;
-      cursor: pointer; }
+      cursor: pointer;
+      border-radius: 8px; }
       .check-list .check .payment-button.disabled {
         background-color: #2e2e2e;
         cursor: default; }
@@ -408,3 +415,101 @@ body {
 
 .company-add-store form.show {
   display: block; }
+
+.report-list {
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center; }
+
+.report {
+  height: 150px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  border-radius: 3px;
+  margin: 20px;
+  -webkit-box-shadow: 2px 2px 5px #000000;
+  box-shadow: 2px 2px 5px #000000; }
+
+.letter-settings {
+  width: 90%;
+  margin: 0px auto;
+  overflow: auto; }
+  .letter-settings form textarea {
+    width: 100%;
+    height: 150px; }
+  .letter-settings form .button {
+    margin: 10px 0px; }
+
+.store-list {
+  width: 90%;
+  margin: 0px auto;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row; }
+  .store-list .store {
+    height: 150px;
+    width: 200px;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    border-radius: 3px;
+    margin: 20px;
+    -webkit-box-shadow: 2px 2px 5px #000000;
+    box-shadow: 2px 2px 5px #000000; }
+    .store-list .store .store-name {
+      font-weight: bold; }
+
+#add-store-button {
+  width: 100px;
+  text-align: center; }
