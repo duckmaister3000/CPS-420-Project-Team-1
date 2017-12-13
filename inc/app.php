@@ -97,7 +97,7 @@
       }
       foreach($storeList as $store): ?>
         <div class="store">
-          <span class"store-name"><?php echo $store->get_name(); ?></span>
+          <span class"store-name"><b><?php echo $store->get_name(); ?></b></span><br>
           <span class"store-street"><?php echo $store->get_street(); ?></span>
           <span class"store-city"><?php echo $store->get_city(); ?></span>
           <span class"store-state"><?php echo $store->get_state(); ?></span>

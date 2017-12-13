@@ -1,4 +1,7 @@
 <?php
+
+$title = "Checkmate - Account";
+
 include 'inc/app.php';
 include 'page-parts/header.php';
 include 'page-parts/sidebar.php';
@@ -46,12 +49,13 @@ if($account == null) {
    <div class="account-info">
      <p>
        <label>First Name</label><input disabled type="text" value="<?php echo $account->get_first_name(); ?>" /><br>
+       <br>
        <label>Last Name</label><input disabled type="text" value="<?php echo $account->get_last_name(); ?>" />
      </p>
      <p>
-       <label>Street</label><input disabled type="text" value="<?php echo $account->get_address(); ?>" /><br>
-       <label>City</label><input disabled type="text" value="<?php echo $account->get_city(); ?>" /><br>
-       <label>State</label><input disabled type="text" value="<?php echo $account->get_state(); ?>" /><br>
+       <label>Street</label><input disabled type="text" value="<?php echo $account->get_address(); ?>" /><br><br>
+       <label>City</label><input disabled type="text" value="<?php echo $account->get_city(); ?>" /><br><br>
+       <label>State</label><input disabled type="text" value="<?php echo $account->get_state(); ?>" /><br><br>
        <label>Zip</label><input disabled type="text" value="<?php echo $account->get_zip(); ?>" />
      </p>
    </div>

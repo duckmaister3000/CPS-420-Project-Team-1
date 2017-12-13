@@ -15,21 +15,21 @@ $company = $user->get_store()->get_company();
     <form>
       <h1>Company Info</h1>
       <label>Company Name:</label>
-      <input type="text" id="company-name" value="<?php echo $company->get_name(); ?>" /><br>
+      <input type="text" id="company-name" value="<?php echo $company->get_name(); ?>" /><br><br>
       <label>Company Phone:</label>
       <input type="phone" id="company-phone" value="<?php echo $company->get_contact(); ?>" /><br>
     </form>
   </div>
   <div class="company-stores">
     <h1>Stores</h1>
-    <div id="store-list">
+    <div id="store-list" class="store-list">
       <?php
       $app->Get_Store_HTML($company);
       ?>
     </div>
   </div>
   <div class="company-add-store">
-    <div class="button" onclick="showStoreForm()">Add Store</div>
+    <div class="button" onclick="showStoreForm()" id="add-store-button">Add Store</div>
     <input type="hidden" value="<?php echo $user->get_id(); ?>" id="user-id" />
     <form id="add-store-form">
       <input type="text" placeholder="Name" id="store-name" required /><br>
