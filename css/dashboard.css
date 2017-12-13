@@ -1,0 +1,29 @@
+
+
+.dashboard{
+  margin: 8px 300;
+  width:20%;
+  padding: 15px -500px;
+}
+
+div.w3-container{
+  margin-left: 20;
+  padding: 0 0 20 -50;
+  width: 23%;
+  text-align: center;
+
+}
+
+
+div.w2-container{
+  padding: 20 0 0 50;
+  margin-left: 70;
+  text-align: center;
+}
+
+div.w4-container{
+  padding: 0 0 0 100;
+  width: 30%;
+  text-align: center;
+
+}

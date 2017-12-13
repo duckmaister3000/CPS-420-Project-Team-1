@@ -1,0 +1,42 @@
+input[type=text] {
+    width: 30%;
+    padding: 12px 20px;
+    margin: 8px 54;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    text-align: left;
+}
+
+
+button {
+  font-family: "Roboto", sans-serif;
+text-transform: uppercase;
+outline: 0;
+background:#1e262e ;
+width:20%;
+border: 0;
+margin: 5px 100;
+padding: 10px;
+color: #FFFFFF;
+font-size: 14px;
+-webkit-transition: all 0.3 ease;
+transition: all 0.3 ease;
+cursor: pointer;
+
+}
+
+.panel-group{
+  margin: 50px 90;
+padding: -150
+
+}
+
+.heading{
+    margin: 50px 110;
+padding:-50 -150;
+}
+.error{
+  margin-left: 100;
+  padding-left: -100
+}
