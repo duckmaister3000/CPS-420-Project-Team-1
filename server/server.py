@@ -166,6 +166,12 @@ class Server:
         letterDate = date(day=datetime.now().day, month=datetime.now().month, year=datetime.now().year)
         letterCurs = self.cnx.cursor(buffered=True)
         letter_num = check.status + 1
+        
+        #check if a report for this letter already exists in the database
+        
+        if self.reportExists(check, letter_num):
+            return
+
         letterQuery = "SELECT letter_header, letter_body, letter_footer FROM `letter` WHERE letter_number = {} AND Company_company_ID = {} LIMIT 1".format(letter_num, company.id)
         letterCurs.execute(letterQuery)
         
@@ -185,6 +191,23 @@ class Server:
         filename = str(check.id) + '_' + str(letterDate) + '.pdf'
         doc = SimpleDocTemplate(filename, pagesize = letter)
         doc.build(paragraphs)
+        self.insertReport(check, filename, company, letter_num)
+
+    def reportExists(self, check, letter_num):
+        cursor = self.cnx.cursor(buffered=True)
+        query = "SELECT report_ID FROM `report` WHERE check_ID = {} AND letter_number = {}".format(check.id, letter_num)
+        cursor.execute(query)
+        letterFound = False;
+        print("checking checkid: {} and letter_num: {}".format(check.id, letter_num))
+        for id in cursor:
+            print('found ' + str(id))
+            letterFound = True;
+            break;
+        return letterFound
+    def insertReport(self, check, filename, company, letter_num):
+        cursor = self.cnx.cursor(buffered=True)
+        query = "INSERT INTO `report` (report_file, letter_number, report_printed, check_ID, company_ID) VALUES ( '{}',{},{},{},{} )".format(filename, letter_num, 0, check.id, company.id)
+        cursor.execute(query)
 
 
 

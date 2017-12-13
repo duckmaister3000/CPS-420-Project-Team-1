@@ -14,7 +14,7 @@ $company = $user->get_store()->get_company();
  <div class="page-body">
    <div class="account-list-wrapper">
      <div class="account-list-header">
-       <input type="text" name="search" placeholder="search" />
+       <!--<input type="text" name="search" placeholder="search" />
        <select name="search-criteria">
          <option>First Name</option>
          <option>Last Name</option>
@@ -22,7 +22,7 @@ $company = $user->get_store()->get_company();
          <option>Zip Code</option>
        </select>
        <input type="button" value="Add Search Criteria" />
-       <input type="submit" value="Search" />
+       <input type="submit" value="Search" />-->
      </div>
      <div class="account-list">
        <table>

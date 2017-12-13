@@ -348,3 +348,57 @@ function showManagerConfirm(check) {
   document.getElementById('target-check').value = check;
   document.getElementById('manager-confirm').classList.add('show');
 }
+
+function showPayCheckModal(check) {
+  var modal = document.getElementById('payment-modal');
+  document.getElementById('check-id').value = check;
+  if(!modal.classList.contains('show')) {
+    modal.classList.add('show');
+  }
+}
+function closePayCheckModal() {
+  var modal = document.getElementById('payment-modal');
+  if(modal.classList.contains('show')) {
+    modal.classList.remove('show');
+  }
+}
+
+function setPrinted(reportId) {
+  var data = new FormData();
+  data.append("action", "report-printed");
+  data.append("report", reportId);
+  $.ajax({
+    url: 'ajax-handler.php', // point to server-side PHP script
+    dataType: 'text',  // what to expect back from the PHP script, if anything
+    cache: false,
+    contentType: false,
+    processData: false,
+    data: data,
+    type: 'post',
+    success: function(response){
+      console.log(response);
+    }
+  });
+}
+
+function payCheck() {
+  var check_id = document.getElementById('check-id').value;
+  var data = new FormData();
+  data.append("action", "pay-check");
+  data.append("check", check_id);
+  var amount = document.getElementById('amount-paid').value;
+  data.append("amount-paid", amount);
+  $.ajax({
+    url: 'ajax-handler.php', // point to server-side PHP script
+    dataType: 'text',  // what to expect back from the PHP script, if anything
+    cache: false,
+    contentType: false,
+    processData: false,
+    data: data,
+    type: 'post',
+    success: function(response){
+      document.getElementById('check-list').innerHTML = response;
+      closePayCheckModal();
+    }
+  });
+}

@@ -81,4 +81,11 @@
           break;
       }
     }
+    if($action == "report-printed"){
+      $app->Set_Printed($_POST['report']);
+    }
+    if($action == "pay-check") {
+      $app->Pay_Check($_POST['check']);
+      $app->Get_Checks_HTML($app->db->Select_Check($_POST['check'])->get_account());
+    }
   }

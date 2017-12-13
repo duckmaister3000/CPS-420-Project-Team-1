@@ -145,6 +145,31 @@ class Database {
     return $ret;
   }
 
+  public function Update_Check($check) {
+    if($check->get_letter_sent_date() == "NOW()"){
+      $stmt = $this->connection->prepare("UPDATE `check` SET check_ammount = ?, check_date = ?, letter_sent_date = NOW(), payment_received = ?, Store_store_ID = ?, Store_Company_company_ID = ?, Account_account_ID = ?, letter_status = ? WHERE check_ID = ?");
+      $stmt->bind_param("dsiiiisi", $amount, $date, $payed, $storeId, $companyId, $accountId, $status, $id);
+    } else {
+      $stmt = $this->connection->prepare("UPDATE `check` SET check_ammount = ?, check_date = ?, letter_sent_date = ?, payment_received = ?, Store_store_ID = ?, Store_Company_company_ID = ?, Account_account_ID = ?, letter_status = ? WHERE check_ID = ?");
+      $stmt->bind_param("dssiiiisi", $amount, $date, $letter_sent, $payed, $storeId, $companyId, $accountId, $status, $id);
+    }
+    $amount = $check->get_amount();
+    $date = $check->get_check_date();
+    $letter_sent = $check->get_letter_sent_date();
+    $payed = $check->get_payment_recieved();
+    $storeId = $check->get_store()->get_id();
+    $companyId = $check->get_company()->get_id();
+    $accountId = $check->get_account()->get_id();
+    $status = $check->get_letter_status();
+    $id = $check->get_id();
+    $stmt->execute();
+    if($stmt->error) {
+      echo $stmt->error;
+      return false;
+    }
+    return true;
+  }
+
   public function Insert_Check($amount, $date, $store, $account) {
     $storeId = $store->get_id();
     $companyId = $store->get_company()->get_id();
@@ -272,6 +297,89 @@ class Database {
       $row = $results->fetch_assoc();
       return new User($row['user_ID'], $row['user_email'], $row['user_password'], $row['user_role_name'], $this->Select_Store($row['Store_store_ID']));
     }
+  }
+
+  // LETTER FUNCTIONS
+  public function Select_Letters($company) {
+    $sql = "SELECT * FROM `letter` WHERE Company_company_ID = " . $company->get_id() . " ORDER BY letter_number";
+    $results = $this->connection->query($sql);
+    if($this->connection->error) {
+      echo $this->connection->error;
+      return array();
+    }
+    $ret = array();
+    if($results->num_rows > 0) {
+      while($row = $results->fetch_assoc()) {
+        array_push($ret, new Letter($row['letter_ID'], $row['letter_header'], $row['letter_body'], $row['letter_footer'], $row['letter_number'], $this->Select_Company($row['Company_company_ID'])));
+      }
+    }
+    return $ret;
+  }
+  public function Update_Letter($letter) {
+    $stmt = $this->connection->prepare("UPDATE `letter` SET letter_header = ?, letter_body = ?, letter_footer = ? WHERE letter_ID = ?");
+
+    $stmt->bind_param("sssi", $header, $body, $footer, $id);
+    $header = $letter->get_header();
+    $body = $letter->get_body();
+    $footer = $letter->get_footer();
+    $id = $letter->get_id();
+    $stmt->execute();
+    if($stmt->error) {
+      echo $stmt->error;
+      return false;
+    }
+    return true;
+  }
+
+  // REPORT FUNCTIONS
+  public function Select_Reports($company) {
+    $sql = "SELECT * FROM `report` WHERE company_ID = " . $company->get_id() . " ORDER BY report_printed";
+    $results = $this->connection->query($sql);
+    if($this->connection->error) {
+      echo $this->connection->error;
+      return array();
+    }
+    $ret = array();
+    if($results->num_rows > 0) {
+      while($row = $results->fetch_assoc()) {
+        array_push($ret, new Report($row['report_ID'], $row['report_file'], $row['letter_number'], $row['report_printed'], $this->Select_Check($row['check_ID']), $this->Select_Company($row['company_ID'])));
+      }
+    }
+    return $ret;
+  }
+
+  public function Select_Report($id) {
+    $sql = "SELECT * FROM `report` WHERE report_ID = " . $id . " LIMIT 1";
+    $results = $this->connection->query($sql);
+    if($this->connection->error) {
+      echo $this->connection->error;
+      return null;
+    }
+    $ret = array();
+    if($results->num_rows > 0) {
+      while($row = $results->fetch_assoc()) {
+        return new Report($row['report_ID'], $row['report_file'], $row['letter_number'], $row['report_printed'], $this->Select_Check($row['check_ID']), $this->Select_Company($row['company_ID']));
+      }
+    } else {
+      return null;
+    }
+  }
+
+  public function Update_Report($report) {
+    $stmt = $this->connection->prepare("UPDATE `report` SET report_file = ?, letter_number = ?, report_printed = ?, check_ID = ?, company_ID = ? WHERE report_ID = ?");
+    $stmt->bind_param("siiiii", $filename, $letter_number, $printed, $checkID, $companyID, $reportID);
+    $filename = $report->get_filename();
+    $letter_number = $report->get_letter_number();
+    $printed = $report->get_printed();
+    $checkID = $report->get_check()->get_id();
+    $companyID = $report->get_check()->get_company()->get_id();
+    $reportID = $report->get_id();
+    $stmt->execute();
+    if($stmt->error) {
+      echo $stmt->error;
+      return false;
+    }
+    return true;
   }
 };
 

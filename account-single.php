@@ -28,20 +28,31 @@ if($account == null) {
      </form>
    </div>
  </div>
+ <div class="modal" id="payment-modal">
+   <div class="modal-content">
+     <form>
+       <p>Enter amount paid: $
+       <input type="text" id="amount-paid" /></p>
+       <input type="hidden" value="" id="check-id" />
+       <input type="button" class="button" value="Save" onclick="payCheck()"/>
+       <input type="button" class="button" value="Cancel" onclick="closePayCheckModal()"/>
+     </form>
+   </div>
+ </div>
  <div class="page-head">
-   <h1>John Doe</h1>
+   <h1><?php echo $account->get_first_name() . ' ' . $account->get_last_name(); ?></h1>
  </div>
  <div class="page-body">
    <div class="account-info">
      <p>
-       <label>First Name</label><input type="text" value="<?php echo $account->get_first_name(); ?>" /><br>
-       <label>Last Name</label><input type="text" value="<?php echo $account->get_last_name(); ?>" />
+       <label>First Name</label><input disabled type="text" value="<?php echo $account->get_first_name(); ?>" /><br>
+       <label>Last Name</label><input disabled type="text" value="<?php echo $account->get_last_name(); ?>" />
      </p>
      <p>
-       <label>Street</label><input type="text" value="<?php echo $account->get_address(); ?>" /><br>
-       <label>City</label><input type="text" value="<?php echo $account->get_city(); ?>" /><br>
-       <label>State</label><input type="text" value="<?php echo $account->get_state(); ?>" /><br>
-       <label>Zip</label><input type="text" value="<?php echo $account->get_zip(); ?>" />
+       <label>Street</label><input disabled type="text" value="<?php echo $account->get_address(); ?>" /><br>
+       <label>City</label><input disabled type="text" value="<?php echo $account->get_city(); ?>" /><br>
+       <label>State</label><input disabled type="text" value="<?php echo $account->get_state(); ?>" /><br>
+       <label>Zip</label><input disabled type="text" value="<?php echo $account->get_zip(); ?>" />
      </p>
    </div>
    <div class="check-list" id="check-list">

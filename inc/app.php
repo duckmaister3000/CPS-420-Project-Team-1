@@ -54,10 +54,10 @@
         <div class="check">
           <span class="check-amount">$<?php echo $check->get_amount(); ?></span>
           <span class="check-status"><?php echo $check->get_payment_recieved() == 0 ? "Unpaid" : "Paid"; ?> </span>
-          <div class="payment-button <?php echo $check->get_payment_recieved() == 0 ? "" : "disabled"; ?>">
+          <div class="payment-button <?php echo $check->get_payment_recieved() == 0 ? "" : "disabled"; ?>" onclick="showPayCheckModal(<?php echo $check->get_id(); ?>)">
             Pay Check
           </div>
-          <div class="delete-button" onclick="showManagerConfirm(<?php echo $check->get_id(); ?>)">Delete</div>
+          <div class="button delete" onclick="showManagerConfirm(<?php echo $check->get_id(); ?>)">Delete</div>
         </div>
       <?php endforeach;
     }
@@ -81,6 +81,11 @@
 
     public function Delete_Check($checkId) {
       return $this->db->Delete_Check($checkId);
+    }
+    public function Pay_Check($checkId) {
+      $check = $this->db->Select_Check($checkId);
+      $check->set_payment_recieved('1');
+      $this->db->Update_Check($check);
     }
 
     // STORE METHODS
@@ -126,6 +131,39 @@
 
     public function Authenticate_User($username, $password) {
       return $this->db->Auth_User($username, $password);
+    }
+
+    public function Get_Letters($company) {
+      return $this->db->Select_Letters($company);
+    }
+
+    public function Save_Letter($letter) {
+      return $this->db->Update_Letter($letter);
+    }
+
+    public function Get_Report_HTML($company) {
+      $reports = $this->db->Select_Reports($company);
+      foreach($reports as $report) {
+        ?>
+          <div class="report <?php echo $report->get_printed() == 1 ? "printed": ""; ?>"
+            <h3><?php echo $report->get_check()->get_account()->get_first_name() . ' ' . $report->get_check()->get_account()->get_last_name(); ?></h3>
+            <h4>$<?php echo $report->get_check()->get_amount(); ?></h4>
+            <a href="server/<?php echo $report->get_filename(); ?>" class="button" target="_blank" onclick="setPrinted(<?php echo $report->get_id(); ?>)">Print</a>
+          </div>
+        <?php
+      }
+    }
+
+    public function Set_Printed($reportId) {
+      $report = $this->db->Select_Report($reportId);
+      $check = $report->get_check();
+      $status = $check->get_letter_status();
+      $status = $report->get_letter_number();
+      $check->set_letter_status($status);
+      $report->set_printed('1');
+      $check->set_letter_sent_date("NOW()");
+      $this->db->Update_Report($report);
+      $this->db->Update_Check($check);
     }
   };
 
